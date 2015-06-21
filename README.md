@@ -1,2 +1,2 @@
-# paramatma
+# ParamatmaCMS
 Paramatma
