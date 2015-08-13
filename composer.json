@@ -1,0 +1,34 @@
+{
+    "name": "paramatma/paramatma",
+    "type": "project",
+    "description": "Paramatma CMS",
+    "require": {
+        "php": ">=5.5",
+        "ext-curl" : "*",
+        "ext-gd" : "*",
+        "ext-imagick" : "*",
+        "ext-intl" : "*",
+        "ext-json" : "*",
+        "ext-mcrypt" : "*",
+        "ext-phalcon" : "*",
+        "ext-pdo" : "*",
+        "phpmailer/phpmailer":  ">=5.0",
+        "gabrielbull/browser": ">3.1",
+        "hashids/hashids": ">1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.7.*",
+        "phpunit/php-invoker": "^1.1",
+        "phalcon/incubator": "^2.0",
+        "phalcon/devtools": "^2.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paramatma team",
+            "email": "dev@paramatma.io",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable"
+}

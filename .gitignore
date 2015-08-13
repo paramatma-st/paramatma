@@ -1,0 +1,104 @@
+######################
+# JetBrains PhpStorm #
+######################
+*.iml
+
+# Directory-based project formats
+.idea/
+
+# File-based project format
+*.ipr
+*.iws
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+############
+# NetBeans #
+############
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+.nb-gradle/
+
+###############
+# TortoiseGit #
+###############
+# Project-level settings
+/.tgitconfig
+
+###################
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+############
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+########
+# Logs #
+########
+*.log
+
+######################
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+*~
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+##################
+# Composer files #
+##################
+composer.phar
+vendor/*
+
+########################
+# Binary gettext files #
+########################
+*.mo
+
+##############################
+# Temp, cache and data files #
+##############################
+app/cache/*
+!app/cache/.keep
+public/assets/*
+!public/assets/.keep
+public/uploads/*
+!public/uploads/.keep
+temp/upload/*
+!temp/upload/.keep
+temp/*
+!temp/.keep
+
+####################
+# Project specific #
+####################
+app/themes/paramatma/
+public/themes/paramatma/
