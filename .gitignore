@@ -1,16 +1,10 @@
 ######################
 # JetBrains PhpStorm #
 ######################
-*.iml
-
-# Directory-based project formats
 .idea/
-
-# File-based project format
+*.iml
 *.ipr
 *.iws
-
-# JIRA plugin
 atlassian-ide-plugin.xml
 
 ############
@@ -28,7 +22,6 @@ nb-configuration.xml
 ###############
 # TortoiseGit #
 ###############
-# Project-level settings
 /.tgitconfig
 
 ###################
@@ -44,8 +37,6 @@ nb-configuration.xml
 ############
 # Packages #
 ############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
 *.7z
 *.dmg
 *.gz
@@ -100,5 +91,7 @@ temp/*
 ####################
 # Project specific #
 ####################
-app/themes/paramatma/
-public/themes/paramatma/
+app/themes/*
+!app/themes/default/
+public/themes/*
+!public/themes/default/
