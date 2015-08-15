@@ -20,7 +20,11 @@
         "phpunit/phpunit": "4.7.*",
         "phpunit/php-invoker": "^1.1",
         "phalcon/incubator": "^2.0",
-        "phalcon/devtools": "^2.0"
+        "phalcon/devtools": "^2.0",
+        "codeception/codeception": "^2.1",
+        "monolog/monolog": "^1.16",
+        "codeception/specify": "^0.4.1",
+        "codeception/verify": "^0.2.7"
     },
     "license": "MIT",
     "authors": [
