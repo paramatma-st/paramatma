@@ -18,7 +18,10 @@ class IndexController extends \Phalcon\Mvc\Controller {
             ->addCss('app.css');
     }
 
-	public function indexAction() {
+	public function indexAction() {       
         $this->view->pick("common/index/index");
+        
+        $logger = $this->getDI()->get('logger');
+         $logger->info('%s(): %s', array(__METHOD__, 'this is INFO message'));
 	}
 }
