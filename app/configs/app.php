@@ -20,7 +20,7 @@ $app['session']['dbId'] = 'db'; // Database ID
 $app['session']['table'] = 'session';
 
 $app['log']['adapter']['file']['extension'] = 'log';
-$app['log']['formatter']['line'] = '%date% [%type%] %message%';
+$app['log']['formatter']['line']['format'] = '%date% [%type%] %message%';
 $app['log']['formatter']['dateFormat'] = 'Y.m.d H:i:s';
 
 return $app;
