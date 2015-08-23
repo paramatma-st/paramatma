@@ -23,6 +23,6 @@ $app['log']['adapter']['file']['nameFormat'] = 'Ymd';
 $app['log']['adapter']['file']['extension'] = 'log';
 $app['log']['formatter']['line']['format'] = '%date% [%type%] %message%';
 $app['log']['formatter']['dateFormat'] = 'Y.m.d H:i:s';
- $app['log']['level'] = \Phalcon\Logger::CUSTOM;
+$app['log']['level'] = \Phalcon\Logger::CUSTOM;
  
 return $app;
