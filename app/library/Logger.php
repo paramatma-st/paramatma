@@ -33,21 +33,27 @@ class Logger
     //--
     protected $_phalconLogger;
 
-    /* function __construct($di_)
-      {
-      $this->_phalconLogger = $di_->get('phalconLogger');
-      } */
-
     /**
-     * Ctor of Logger class
+     * Ctor of Logger class.
      * @param object $phL_ - reference of previously created basic \Phalcon\Logger
      * class.
      */
     function __construct($phL_)
     {
         $this->_phalconLogger = $phL_;
+        $this->begin();
     }
 
+    /**
+     * Dtor of Logger class.
+     */
+    function __destruct()
+    {
+        if($this->isTransaction()){
+            $this->commit();
+        }
+    }
+    
     /**
      * Sets logging level of Logger.
      * @param integer $logLevel_ - new logging level value. Can be on of following 
