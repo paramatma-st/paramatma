@@ -5,7 +5,7 @@ $app['i18n']['timeformat'] = 'r';
 
 $app['baseURI'] = '';
 $app['theme'] = 'paramatma';
-$app['heme_suffix'] = 'phtml';
+$app['theme_suffix'] = 'phtml';
 
 $app['database']['db']['adapter'] = 'mysql';
 $app['database']['db']['host'] = '127.0.0.1';
