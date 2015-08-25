@@ -22,6 +22,11 @@ class IndexController extends \Phalcon\Mvc\Controller {
         $this->view->pick("common/index/index");
         
         $logger = $this->getDI()->get('logger');
-         $logger->info('%s(): %s', array(__METHOD__, 'this is INFO message'));
+        
+        //-- usage
+        if($logger->customFlag){
+            $logger->info(array(__METHOD__, 'this is INFO message as ARRAY'), '%s(): %s');
+            $logger->info(__METHOD__ . '(): this is INFO message as STRING');
+        }
 	}
 }
