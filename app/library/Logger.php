@@ -16,7 +16,7 @@ namespace Paramatma;
  * 
  * The Logger adds possibility of conditional logging without
  * memory overhead by check corresponding xxxFlag variable before call
- * on of logging method.
+ * any logging method.
  */
 class Logger
 {
@@ -35,12 +35,13 @@ class Logger
 
     /**
      * Ctor of Logger class.
-     * @param object $phL_ - reference of previously created basic \Phalcon\Logger
+     * 
+     * @param object $phLogger_ reference of previously created basic \Phalcon\Logger
      * class.
      */
-    function __construct($phL_)
+    function __construct($phLogger_)
     {
-        $this->_phalconLogger = $phL_;
+        $this->_phalconLogger = $phLogger_;
         $this->begin();
     }
 
@@ -49,26 +50,26 @@ class Logger
      */
     function __destruct()
     {
-        if($this->isTransaction()){
-            $this->commit();
-        }
+        $this->commit();
     }
-    
+
     /**
      * Sets logging level of Logger.
-     * @param integer $logLevel_ - new logging level value. Can be on of following 
+     * 
+     * @param integer $logLevel_ new logging level value. 
+     * Can be one of following 
      * values:
-     * integer SPECIAL = 9
-     * integer CUSTOM = 8
-     * integer DEBUG = 7
-     * integer INFO = 6
-     * integer NOTICE = 5
-     * integer WARNING = 4
-     * integer ERROR = 3
-     * integer ALERT = 2
-     * integer CRITICAL = 1
-     * integer EMERGENCE = 0
-     * integer EMERGENCY = 0
+     *   integer \Phalcon\Logger::SPECIAL = 9
+     *   integer \Phalcon\Logger::CUSTOM = 8
+     *   integer \Phalcon\Logger::DEBUG = 7
+     *   integer \Phalcon\Logger::INFO = 6
+     *   integer \Phalcon\Logger::NOTICE = 5
+     *   integer \Phalcon\Logger::WARNING = 4
+     *   integer \Phalcon\Logger::ERROR = 3
+     *   integer \Phalcon\Logger::ALERT = 2
+     *   integer \Phalcon\Logger::CRITICAL = 1
+     *   integer \Phalcon\Logger::EMERGENCE = 0
+     *   integer \Phalcon\Logger::EMERGENCY = 0
      * 
      */
     public function setLogLevel($logLevel_)
@@ -106,15 +107,6 @@ class Logger
     }
 
     /**
-     * Indicates logging transaction existence.
-     * @return boolean
-     */
-    public function isTransaction()
-    {
-        return $this->_phalconLogger->isTransaction();
-    }
-
-    /**
      * Starts logging transaction.
      */
     public function begin()
@@ -140,113 +132,126 @@ class Logger
 
     /**
      * Writes logs in SPECIAL logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function special($format_, array $args_)
+    public function special($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::SPECIAL, $format_, $args_);
+        $this->log(\Phalcon\Logger::SPECIAL, $message_, $format_);
     }
 
     /**
      * Writes logs in CUSTOM logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function custom($format_, array $args_)
+    public function custom($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::CUSTOM, $format_, $args_);
+        $this->log(\Phalcon\Logger::CUSTOM, $message_, $format_);
     }
 
     /**
      * Writes logs in DEBUG logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function debug($format_, array $args_)
+    public function debug($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::DEBUG, $format_, $args_);
+        $this->log(\Phalcon\Logger::DEBUG, $message_, $format_);
     }
 
     /**
      * Writes logs in INFO logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function info($format_, array $args_)
+    public function info($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::INFO, $format_, $args_);
+        $this->log(\Phalcon\Logger::INFO, $message_, $format_);
     }
 
     /**
      * Writes logs in NOTICE logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function notice($format_, array $args_)
+    public function notice($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::NOTICE, $format_, $args_);
+        $this->log(\Phalcon\Logger::NOTICE, $message_, $format_);
     }
 
     /**
      * Writes logs in WARINING logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function warning($format_, array $args_)
+    public function warning($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::WARNING, $format_, $args_);
+        $this->log(\Phalcon\Logger::WARNING, $message_, $format_);
     }
 
     /**
      * Writes logs in ERROR logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function error($format_, array $args_)
+    public function error($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::ERROR, $format_, $args_);
+        $this->log(\Phalcon\Logger::ERROR, $message_, $format_);
     }
 
     /**
      * Writes logs in ALERT logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function alert($format_, array $args_)
+    public function alert($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::ALERT, $format_, $args_);
+        $this->log(\Phalcon\Logger::ALERT, $message_, $format_);
     }
 
     /**
      * Writes logs in CRITICAL logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function critical($format_, array $args_)
+    public function critical($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::CRITICAL, $format_, $args_);
+        $this->log(\Phalcon\Logger::CRITICAL, $message_, $format_);
     }
 
     /**
      * Writes logs in EMERGENCY logging level format.
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function emergency($format_, array $args_)
+    public function emergency($message_, $format_ = null)
     {
-        $this->log(\Phalcon\Logger::EMERGENCY, $format_, $args_);
+        $this->log(\Phalcon\Logger::EMERGENCY, $message_, $format_);
     }
 
     /**
      * Writes logs in user specified logging level format.
-     * @param integer $type_ - logging level
-     * @param string $format_ - format string similar as PHP vsprintf() format.
-     * @param array $args_ - data to log to.
+     * 
+     * @param integer $type_ logging level
+     * @param mixed $message_ data to log to.
+     * @param string $format_ format string similar as PHP vsprintf() format.
      */
-    public function log($type_, $format_, array $args_)
+    public function log($type_, $message_, $format_ = null)
     {
-        $message = vsprintf($format_, $args_);
-        $this->_phalconLogger->log($type_, $message);
+        if ((is_array($message_) || is_object($message_)) && !empty($message_) && !empty($format_)) {
+            $message_ = vsprintf($format_, (array) $message_);
+        }
+        $this->_phalconLogger->log($type_, $message_);
     }
 }
