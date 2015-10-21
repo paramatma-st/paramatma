@@ -8,11 +8,11 @@ $app['theme'] = 'paramatma';
 $app['theme_suffix'] = 'phtml';
 
 $app['database']['db']['adapter'] = 'mysql';
-$app['database']['db']['host'] = '127.0.0.1';
+$app['database']['db']['host'] = 'localhost'; // '127.0.0.1';
 $app['database']['db']['port'] = 3306;
-$app['database']['db']['username'] = 'root';
-$app['database']['db']['password'] = '';
-$app['database']['db']['dbname'] = 'paramatma.dev';
+$app['database']['db']['username'] = 'paramatma';
+$app['database']['db']['password'] = 'paramatma';
+$app['database']['db']['dbname'] = 'paramatma';
 $app['database']['db']['tablePrefix'] = 'pa_';
 
 $app['session']['adapter'] = 'mysql';
