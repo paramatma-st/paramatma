@@ -215,7 +215,7 @@ class Application extends \Phalcon\Mvc\Application
         }
 
         // Initializing and registering session
-        switch (strtolower($appConfig->session->adapter)) {
+        /*switch (strtolower($appConfig->session->adapter)) {
             case 'file':
                 $di->setShared($id,
                                function() {
@@ -240,7 +240,7 @@ class Application extends \Phalcon\Mvc\Application
             case 'redis':
                 throw new \Phalcon\Exception('Not implemented');
                 break;
-        }
+        }*/
 
         /**
          * Detect SSL requests and change a session name

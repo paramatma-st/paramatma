@@ -15,56 +15,52 @@ use \Phalcon\Config\Exception;
 
 class Mysql extends \Phalcon\Config
 {
+    const SQL_INS = 'INSERT INTO pa_config (path, value) VALUES (?, ?)';
+    const SQL_SEL = 'SELECT path, value FROM pa_config';
+    const SQL_DEL = 'DELETE FROM pa_config';
+
+    //--
     private $_logger;
-    private $_table;
-    private $_db_config;
+    private $_db;
 
     /**
      * Consturctor of class Mysql
      * 
      * @param \Phalcon\Config $db_config_ - \Phalcon\Config object reference with db related data.
-     * @param \Logger $logger_ - reference of Logger instance.
-     * @param String $table_ - reference of table name whith configuration data.
+     * @param \Paramatma\Logger $logger_ - reference of Logger instance.
      * @throws Exception
      */
-    public function __construct(&$db_config_, &$logger_, &$table_)
+    public function __construct(&$db_, &$logger_)
     {
         //-- check
-        if (!isset($db_config_)) {
-            throw new Exception("The parameter 'db_config_' is required");
+        if (!($db_ instanceof \Phalcon\Db\Adapter\Pdo)) {
+            throw new Exception('The parameter \'db_\' is invalid!');
         }
 
-        if (!isset($table_)) {
-            throw new Exception("You should provide a table name");
+        if (!($logger_ instanceof \Paramatma\Logger )) {
+            throw new Exception('The parameter \'logger_\' is invalid!');
         }
 
         //-- code
-        $this->_db_config = $db_config_;
-        $this->_logger    = $logger_;
-        $this->_table     = $table_;
+        $this->_db     = $db_;
+        $this->_logger = $logger_;
 
-        parent::__construct($this->get()->toArray());
+        parent::__construct();
+        $this->_fetch();
     }
 
     /**
-     * Gets configuration data from DB.
-     * 
-     * @return \Phalcon\Config object with configuration data.
+     * Gets configuration data from Database.
      */
-    public function get()
+    private function _fetch()
     {
-        $method         = __METHOD__;
-        $logger         = $this->_logger;
+        $method   = __METHOD__;
+        $logger   = $this->_logger;
         //--
-        $db_connection  = new \Phalcon\Db\Adapter\Pdo\Mysql($this->_db_config);
-        $db_sel_request = 'SELECT path, value FROM ' . $this->_table;
-        $db_sel_result  = $db_connection->fetchAll($db_sel_request,
-                                                   \Phalcon\Db::FETCH_ASSOC);
+        $dbResult = $this->_db->fetchAll(self::SQL_SEL, \Phalcon\Db::FETCH_ASSOC);
 
         $traverse = function($inp_, $out_) use (&$logger, &$method) {
             if (empty($inp_)) {
-                //$err = $method . '(): invalid array:[' . $inp_ . ']!';
-                //$logger->error($err);
                 return;
             }
             //--
@@ -91,66 +87,87 @@ class Mysql extends \Phalcon\Config
             }
         };
 
-        $out_config = new \Phalcon\Config();
-        $traverse($db_sel_result, $out_config);
-
-        return $out_config;
+        $traverse($dbResult, $this);
     }
 
     /**
-     * Stores new data from \Phalcon\Config object into DB. 
-     * Old data was deleted before store new one.
+     * Stores confguration data into Database.
+     */
+    public function save()
+    {
+        $method   = __METHOD__;
+        $logger   = $this->_logger;
+        $dbConn   = $this->_db;
+        $dbInsert = self::SQL_INS;
+
+        //--
+        try {
+            do {
+                $dbConn->begin();
+                $dbResult = $dbConn->execute(self::SQL_DEL);
+                if (!$dbResult) {
+                    if ($logger->errorFlag) {
+                        $e = $method . '(): could not delete records res:[' . $dbResult . '].';
+                        $logger->error($e);
+                    }
+                    break;
+                }
+
+                $traverse = function($config_, $path_) use (&$traverse, &$dbConn, &$dbInsert, &$logger, &$method) {
+                    foreach ($config_ as $key => $val) {
+                        $npath = ($path_ !== '/' ? $path_ . '/' . $key : $path_ . $key);
+                        if ($val instanceof \Phalcon\Config) {
+                            $traverse($val, $npath);
+                        } else if (is_string($val)) {
+                            $dbResult = $dbConn->execute($dbInsert,
+                                                         array($npath, $val));
+                            if (!$dbResult) {
+                                if ($logger->errorFlag) {
+                                    $e = $method . '() could not insert records res:[' . $dbResult . '].';
+                                    $logger->error($e);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                };
+
+                $traverse($this, '/');
+
+                $dbConn->commit();
+            } while (false);
+        } catch (\Phalcon\Exception $e) {
+            if ($logger->errorFlag) {
+                $logger->error($method . '(): ex:[' . $e->getMessage() . '].');
+            }
+            if (!empty($dbConn)) {
+                if ($dbConn->isUnderTransaction()) {
+                    $dbConn->rollback();
+                }
+            }
+        }
+    }
+
+    /**
+     * Merge configuration parameters from $config_ to this object.
      * 
      * @param \Phalcon\Config $config_
      */
-    public function set($config_)
+    public function merge(&$config_)
     {
-        $db_connection = NULL;
-        $method = __METHOD__;
         $logger = $this->_logger;
-        $table  = $this->_table;
 
-        try {
-            $db_connection  = new \Phalcon\Db\Adapter\Pdo\Mysql($this->_db_config);
-            $db_connection->begin();
-            $db_del_request = 'DELETE FROM ' . $table;
-
-            $db_result = $db_connection->execute($db_del_request);
-            if (!$db_result) {
-                if ($logger->errorFlag) {
-                    $e = __METHOD__ . '() could not delete records res:[' . $db_result . '].';
-                    $logger->error($e);
-                    echo $e . '<br />';
-                }
-                return;
+        //--
+        if (empty($config_)) {
+            if ($logger->errorFlag) {
+                $e = __METHOD__ . '(): empty config passed.';
+                $logger->error($e);
             }
+            return;
+        }
 
-            $traverse = function($config_, $path_) use (&$traverse, &$db_connection, &$table) {
-                $db_ins_request = 'INSERT INTO ' . $table . ' (path, value) VALUES(?, ?)';
-                //--
-                foreach ($config_ as $key => $val) {
-                    $npath = ($path_ !== '/' ? $path_ . '/' . $key : $path_ . $key);
-                    if ($val instanceof \Phalcon\Config) {
-                        $traverse($val, $npath);
-                    } else {
-                        $db_result = $db_connection->execute($db_ins_request,
-                                                             array($npath, $val));
-                    }
-                }
-            };
-
-            $traverse($config_, '/');
-
-            $db_connection->commit();
-        } catch (\Phalcon\Exception $e) {
-            if($logger->errorFlag){
-                $logger->error($method . '(): ex:[' . $e->getMessage() . '].');
-            }
-            if (!empty($db_connection)) {
-                if ($db_connection->isUnderTransaction()) {
-                    $db_connection->rollback();
-                }
-            }
+        foreach ($config_ as $key => $val) {
+            $this[$key] = $val;
         }
     }
 }

@@ -17,6 +17,7 @@ $app['database']['db']['tablePrefix'] = 'pa_';
 
 $app['session']['adapter'] = 'mysql';
 $app['session']['dbId'] = 'db'; // Database ID
+$app['session']['db'] = 'db';
 $app['session']['table'] = 'session';
 
 $app['log']['adapter']['file']['nameFormat'] = 'Ymd';
